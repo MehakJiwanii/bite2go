@@ -1,4 +1,4 @@
-import 'package:bite2go/Screens/OnBoarding/Login/SignupScreen.dart';
+import 'package:bite2go/Screens/Login/SignupScreen.dart';
 import 'package:bite2go/constants/Constants.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
