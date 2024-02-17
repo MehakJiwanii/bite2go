@@ -1,3 +1,4 @@
+import 'package:bite2go/Screens/OnBoarding/Login/SignupScreen.dart';
 import 'package:bite2go/constants/Constants.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -47,7 +48,13 @@ class _Screen2State extends State<Screen2> {
                     backgroundColor: MPrimaryColor,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(20)))),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SignupScreen(),
+                      ));
+                },
                 child: Text(
                   'Take a Bite',
                   textAlign: TextAlign.center,

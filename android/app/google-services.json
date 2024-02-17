@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "467363273148",
+    "project_id": "bites2go-1e087",
+    "storage_bucket": "bites2go-1e087.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:467363273148:android:01964ea1a9c693331433b9",
+        "android_client_info": {
+          "package_name": "com.example.bite2go"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjCqdKKKfhyDIVfSAUHweyFe-VA2UFRjs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

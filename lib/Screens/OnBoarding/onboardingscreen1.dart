@@ -1,4 +1,4 @@
-import 'package:bite2go/Screens/Screen2.dart';
+import 'package:bite2go/Screens/OnBoarding/Screen2.dart';
 import 'package:bite2go/constants/Constants.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
