@@ -1,3 +1,4 @@
+import 'package:bite2go/Screens/Login/LoginScreen.dart';
 import 'package:bite2go/constants/Constants.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -70,19 +71,6 @@ class _OrState extends State<Or> {
                 ),
               ),
             )
-          ],
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("Already Have An Account?"),
-            Text(
-              ' Sign In',
-              style: GoogleFonts.montserrat(color: MPrimaryColor),
-            ),
           ],
         ),
       ],

@@ -1,80 +1,181 @@
 import 'package:bite2go/Screens/Login/LoginScreen.dart';
 import 'package:bite2go/Screens/Login/Or.dart';
 import 'package:bite2go/constants/Constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SignupScreen extends StatefulWidget {
-  const SignupScreen({Key? key}) : super(key: key);
+  const SignupScreen({super.key});
 
   @override
   State<SignupScreen> createState() => _SignupScreenState();
 }
 
 class _SignupScreenState extends State<SignupScreen> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passController = TextEditingController();
+  TextEditingController numberController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+
   bool passToggle = true;
   bool isChecked = false;
 
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future<void> _SignUp() async {
+    try {
+      UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
+              email: emailController.text.trim(),
+              password: passController.text);
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LoginScreen(),
+        ),
+      );
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('The password is too weak');
+      } else if (e.code == 'email-already-in-use ') {
+        print('the account already exists');
+      }
+    } catch (e) {
+      print('Error during registration: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Center(
                 child: Text(
                   'Sign Up',
                   textAlign: TextAlign.center,
                   style: GoogleFonts.montserrat(
-                    fontSize: screenWidth * 0.05,
+                    fontSize: 23,
                     color: MPrimaryColor,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
               ),
-              SizedBox(height: screenHeight * 0.03),
-              buildTextField(
-                hintText: 'Username',
-                prefixIcon: Icons.person_2_outlined,
+              SizedBox(
+                height: 50,
               ),
-              SizedBox(height: screenHeight * 0.02),
-              buildTextField(
-                hintText: 'Email',
-                prefixIcon: Icons.email_outlined,
+              TextFormField(
+                controller: nameController,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your name';
+                  }
+                  return null;
+                },
+                decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Color(0x3FD9D9D9),
+                    prefixIcon: Icon(
+                      Icons.person_2_outlined,
+                      color: Colors.grey,
+                    ),
+                    hintText: 'Username',
+                    focusColor: Colors.grey,
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20))),
               ),
-              SizedBox(height: screenHeight * 0.02),
-              buildTextField(
-                hintText: 'Phone number',
-                prefixIcon: Icons.phone,
+              SizedBox(
+                height: 20,
               ),
-              SizedBox(height: screenHeight * 0.02),
-              buildTextField(
-                hintText: 'Password',
-                prefixIcon: Icons.lock_open,
-                isPassword: true,
+              TextFormField(
+                controller: emailController,
+                decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Color(0x3FD9D9D9),
+                    prefixIcon: Icon(
+                      Icons.email_outlined,
+                      color: Colors.grey,
+                    ),
+                    hintText: 'Email',
+                    focusColor: Colors.grey,
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20))),
               ),
-              SizedBox(height: screenHeight * 0.015),
+              SizedBox(
+                height: 20,
+              ),
+              TextFormField(
+                controller: numberController,
+                decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Color(0x3FD9D9D9),
+                    prefixIcon: Icon(
+                      Icons.phone,
+                      color: Colors.grey,
+                    ),
+                    hintText: 'Phone number',
+                    focusColor: Colors.grey,
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20))),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              TextFormField(
+                controller: passController,
+                obscureText: passToggle,
+                decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Color(0x3FD9D9D9),
+                    suffixIcon: InkWell(
+                      onTap: () {
+                        setState(() {
+                          passToggle = !passToggle;
+                        });
+                      },
+                      child: Icon(
+                          passToggle ? Icons.visibility_off : Icons.visibility),
+                    ),
+                    prefixIcon: Icon(
+                      Icons.lock_open,
+                      color: Colors.grey,
+                    ),
+                    hintText: 'Password',
+                    focusColor: Colors.grey,
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20))),
+              ),
+              SizedBox(
+                height: 15,
+              ),
               Row(
                 children: [
-                  Checkbox(
-                    activeColor: MPrimaryColor,
-                    value: isChecked,
-                    onChanged: (value) {
-                      setState(() {
-                        isChecked = !isChecked;
-                      });
-                    },
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      height: 15,
+                      width: 15,
+                      child: Checkbox(
+                        activeColor: Color(0x3FD9D9D9),
+                        checkColor: MPrimaryColor,
+                        value: isChecked,
+                        onChanged: (value) {
+                          setState(() {
+                            isChecked = !isChecked;
+                          });
+                        },
+                      ),
+                    ),
                   ),
                   Text(
-                    "I agree to the",
+                    "   I agree to the",
                     style: GoogleFonts.montserrat(
-                      fontSize: screenWidth * 0.033,
+                      fontSize: 12,
                       color: Color(0xFF161616),
                       fontWeight: FontWeight.w400,
                     ),
@@ -82,7 +183,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   Text(
                     " Terms & Conditions",
                     style: GoogleFonts.montserrat(
-                      fontSize: screenWidth * 0.033,
+                      fontSize: 12,
                       color: MPrimaryColor,
                       fontWeight: FontWeight.w400,
                     ),
@@ -90,7 +191,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   Text(
                     " and",
                     style: GoogleFonts.montserrat(
-                      fontSize: screenWidth * 0.033,
+                      fontSize: 12,
                       color: Color(0xFF161616),
                       fontWeight: FontWeight.w400,
                     ),
@@ -98,80 +199,61 @@ class _SignupScreenState extends State<SignupScreen> {
                   Text(
                     " Privacy Policy",
                     style: GoogleFonts.montserrat(
-                      fontSize: screenWidth * 0.033,
+                      fontSize: 12,
                       color: MPrimaryColor,
                       fontWeight: FontWeight.w400,
                     ),
                   )
                 ],
               ),
-              SizedBox(height: screenHeight * 0.025),
-              buildElevatedButton(
-                buttonText: 'Sign Up',
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => LoginScreen(),
-                    ),
-                  );
-                },
+              SizedBox(
+                height: 35,
               ),
-              SizedBox(height: screenHeight * 0.02),
-              Or(),
+              Container(
+                width: 350,
+                height: 58,
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: MPrimaryColor,
+                        shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20)))),
+                    onPressed: _SignUp,
+                    child: Text(
+                      'Sign Up',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.montserrat(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    )),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Container(
+                child: Or(),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Already Have An Account?"),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => LoginScreen(),
+                          ));
+                    },
+                    child: Text(
+                      ' Sign In',
+                      style: GoogleFonts.montserrat(color: MPrimaryColor),
+                    ),
+                  ),
+                ],
+              ),
             ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget buildTextField({
-    required String hintText,
-    required IconData prefixIcon,
-    bool isPassword = false,
-  }) {
-    return TextFormField(
-      obscureText: isPassword ? passToggle : false,
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: Color(0x3FD9D9D9),
-        prefixIcon: Icon(
-          prefixIcon,
-          color: Colors.grey,
-        ),
-        hintText: hintText,
-        focusColor: Colors.grey,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-      ),
-    );
-  }
-
-  Widget buildElevatedButton({
-    required String buttonText,
-    required VoidCallback onPressed,
-  }) {
-    return Container(
-      width: double.infinity,
-      height: 58,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: MPrimaryColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(20),
-            ),
-          ),
-        ),
-        onPressed: onPressed,
-        child: Text(
-          buttonText,
-          textAlign: TextAlign.center,
-          style: GoogleFonts.montserrat(
-            fontSize: 20,
-            fontWeight: FontWeight.w700,
           ),
         ),
       ),
