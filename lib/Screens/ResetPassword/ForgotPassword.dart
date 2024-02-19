@@ -57,16 +57,23 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             SizedBox(
               height: 25,
             ),
-            customebtn(
-              () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => OTP(),
-                    ));
-              },
-              'Submit',
-            )
+            Container(
+                width: 350,
+                height: 58,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: MPrimaryColor,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(20)))),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => OTP(),
+                        ));
+                  },
+                  child: Text('Submit'),
+                ))
           ],
         ),
       ),
