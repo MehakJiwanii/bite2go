@@ -1,4 +1,5 @@
 import 'package:bite2go/Screens/Login/SignupScreen.dart';
+import 'package:bite2go/Screens/ResetPassword/PartnerReg/Partne_Reg.dart';
 import 'package:bite2go/constants/Constants.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -63,6 +64,28 @@ class _Screen2State extends State<Screen2> {
                     fontWeight: FontWeight.w700,
                   ),
                 )),
+          ),
+          SizedBox(
+            height: 30,
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Partner_Registration()));
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Have a Food Business?'),
+                Text(
+                  'Join As a Partner.',
+                  style: GoogleFonts.montserrat(
+                      color: MPrimaryColor, fontWeight: FontWeight.w800),
+                )
+              ],
+            ),
           )
         ]),
       ),
