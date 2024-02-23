@@ -1,6 +1,8 @@
+import 'package:bite2go/Screens/Dummy.dart';
 import 'package:bite2go/Screens/Login/Or.dart';
 import 'package:bite2go/Screens/ResetPassword/PartnerReg/Partner_Login.dart';
 import 'package:bite2go/constants/Constants.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -23,27 +25,61 @@ class _Partner_RegistrationState extends State<Partner_Registration> {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  Future<void> _SignUp() async {
-    try {
-      UserCredential userCredential =
-          await _auth.createUserWithEmailAndPassword(
-              email: emailController.text.trim(),
-              password: passController.text);
+  // Future<void> _SignUp() async {
+  //   try {
+  //     UserCredential userCredential =
+  //         await _auth.createUserWithEmailAndPassword(
+  //             email: emailController.text.trim(),
+  //             password: passController.text);
 
+  //     Navigator.push(
+  //       context,
+  //       MaterialPageRoute(
+  //         builder: (context) => PartnerLogin(),
+  //       ),
+  //     );
+  //   } on FirebaseAuthException catch (e) {
+  //     if (e.code == 'weak-password') {
+  //       print('The password is too weak');
+  //     } else if (e.code == 'email-already-in-use ') {
+  //       print('the account already exists');
+  //     }
+  //   } catch (e) {
+  //     print('Error during registration: $e');
+  //   }
+  // }
+
+  SaveDataToFirestore(User currentUser) {
+    FirebaseFirestore.instance.collection('Sellers').doc(currentUser.uid).set({
+      'SellerUID': currentUser.uid,
+      'SellerEmail': currentUser.email,
+      'SellerName': nameController.text.trim(),
+      //'SellerUrl'   : SellerImageUrl,
+      "Phone": numberController.text.trim(),
+      "status": 'approved',
+      'earnings': 0.0,
+      //'lat':positiom.Latitude
+      //'lng': positiom.Longitude
+    });
+  }
+
+  Future<void> AuthenticateSellerandSignUp() async {
+    User? currentUser;
+    final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+    await firebaseAuth
+        .createUserWithEmailAndPassword(
+            email: emailController.text.trim(),
+            password: passController.text.trim())
+        .then((auth) {
+      currentUser = auth.user;
+    });
+    if (currentUser != null) {
+      SaveDataToFirestore(currentUser!);
       Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => PartnerLogin(),
-        ),
-      );
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        print('The password is too weak');
-      } else if (e.code == 'email-already-in-use ') {
-        print('the account already exists');
-      }
-    } catch (e) {
-      print('Error during registration: $e');
+          context,
+          MaterialPageRoute(
+            builder: (context) => Dummy(),
+          ));
     }
   }
 
@@ -55,6 +91,7 @@ class _Partner_RegistrationState extends State<Partner_Registration> {
           scrollDirection: Axis.vertical,
           child: Column(
             children: [
+              CircleAvatar(),
               Center(
                 child: Text(
                   'Sign Up\n As Restaurant',
@@ -218,7 +255,7 @@ class _Partner_RegistrationState extends State<Partner_Registration> {
                         shape: RoundedRectangleBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(20)))),
-                    onPressed: _SignUp,
+                    onPressed: AuthenticateSellerandSignUp,
                     child: Text(
                       'Sign Up',
                       textAlign: TextAlign.center,

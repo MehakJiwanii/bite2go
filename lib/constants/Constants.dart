@@ -18,7 +18,3 @@ customebtn(VoidCallback voidCallback, String text) {
         child: Text(text),
       ));
 }
-//final Mbgcolor =
-    // Theme.of(context as BuildContext).brightness == Brightness.light
-    //     ? Colors.white
-    //     : Colors.black;
